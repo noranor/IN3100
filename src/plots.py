@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Written by Nicholas Karlsen
+from __future__ import division
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -29,7 +30,7 @@ def parseFolder(path):
     return filenames
 
 
-def initData(path="../data/soekere_pr_omraade/"):
+def initData(path):
     filenames = parseFolder(path)
 
     numFiles = len(filenames)
@@ -49,13 +50,37 @@ def initData(path="../data/soekere_pr_omraade/"):
 
     return data, f
 
-data, fields = initData()
 
-for f in fields:
-    plt.plot(data[f][0], data[f][1], "o--", label=f)
+data_applicants, fields_applicants = initData(path="../data/soekere_pr_omraade/")
+
+for f in fields_applicants:
+    plt.plot(data_applicants[f][0], data_applicants[f][1], "o--", label=f)
 
 plt.xlabel("Year")
 plt.ylabel("Number of applicants")
 plt.legend()
 
 plt.show()
+
+
+data_capacity, fields_capacity = initData(path="../data/studieplasser_pr_omraade/")
+
+for f in fields_capacity:
+    plt.plot(data_capacity[f][0], data_capacity[f][1], "o--", label=f)
+
+plt.xlabel("Year")
+plt.ylabel("Number of applicants")
+plt.legend()
+
+plt.show()
+
+
+for f in fields_applicants:
+    plt.plot(data_applicants[f][0], np.array(data_applicants[f][1]) / np.array(data_capacity[f][1]), "o--", label=f)
+
+plt.xlabel("Year")
+plt.ylabel("Applicants / Capacity")
+plt.legend()
+plt.show()
+
+# TODO Divite num applicants per field by number of applicants THAT year
