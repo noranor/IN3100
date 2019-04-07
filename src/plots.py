@@ -50,37 +50,46 @@ def initData(path):
 
     return data, f
 
-
 data_applicants, fields_applicants = initData(path="../data/soekere_pr_omraade/")
-
-for f in fields_applicants:
-    plt.plot(data_applicants[f][0], data_applicants[f][1], "o--", label=f)
-
-plt.xlabel("Year")
-plt.ylabel("Number of applicants")
-plt.legend()
-
-plt.show()
-
-
 data_capacity, fields_capacity = initData(path="../data/studieplasser_pr_omraade/")
 
-for f in fields_capacity:
-    plt.plot(data_capacity[f][0], data_capacity[f][1], "o--", label=f)
+# Beware of spaghetti code.
 
-plt.xlabel("Year")
-plt.ylabel("Number of applicants")
-plt.legend()
-
-plt.show()
-
+# Fetch length of array from arbitrary list (all are same lenght anyway)
+totApplicants = np.zeros(len(data_applicants["JUS"][1]))
+# itterate through all lists
+for f in fields_applicants:
+    # for each one, ++ number of applicants to i-th year
+    for i, val in enumerate(data_applicants[f][1]):
+        totApplicants[i] += val
 
 for f in fields_applicants:
-    plt.plot(data_applicants[f][0], np.array(data_applicants[f][1]) / np.array(data_capacity[f][1]), "o--", label=f)
+    fig = plt.figure(figsize=(8, 8))
 
-plt.xlabel("Year")
-plt.ylabel("Applicants / Capacity")
-plt.legend()
-plt.show()
+    plt.subplot(2, 2, 1)
+    plt.plot(data_applicants[f][0], 100 * np.array(data_applicants[f][1]) / totApplicants, "o--")
+    plt.xlabel("År")
+    plt.ylabel("% Antall søkere [Antall søkere / Totalt antall søkere]")
 
-# TODO Divite num applicants per field by number of applicants THAT year
+    plt.subplot(2, 2, 2)
+    plt.plot(data_applicants[f][0], np.array(data_applicants[f][1]) / np.array(data_capacity[f][1]), "o--")
+    plt.xlabel("År")
+    plt.ylabel("Antall søkere / Antall studieplasser")
+
+    plt.subplot(2, 2, 3)
+    plt.plot(data_capacity[f][0], data_capacity[f][1], "o--")
+    plt.xlabel("År")
+    plt.ylabel("Antall studieplasser")
+    
+    plt.subplot(2, 2, 4)
+    plt.plot(data_applicants[f][0], data_applicants[f][1], "o--")
+    plt.xlabel("År")
+    plt.ylabel("Antall søkere")
+
+    plt.suptitle(f)
+
+    fig.tight_layout()
+
+
+    plt.savefig("../figs/" + f + ".png")
+    plt.close()
