@@ -63,8 +63,40 @@ for f in fields_applicants:
     for i, val in enumerate(data_applicants[f][1]):
         totApplicants[i] += val
 
+# Combined plots
+fig = plt.figure(figsize=(8.27*1.6, 11.69*1.6))
 for f in fields_applicants:
-    fig = plt.figure(figsize=(8, 8))
+    plt.subplot(2, 2, 1)
+    plt.plot(data_applicants[f][0], 100 * np.array(data_applicants[f][1]) / totApplicants, "o--", label=f)
+    plt.xlabel("År")
+    plt.ylabel("% Antall søkere [Antall søkere / Totalt antall søkere]")
+    plt.legend(ncol=2)
+
+    plt.subplot(2, 2, 2)
+    plt.plot(data_applicants[f][0], np.array(data_applicants[f][1]) / np.array(data_capacity[f][1]), "o--", label=f)
+    plt.xlabel("År")
+    plt.ylabel("Antall søkere / Antall studieplasser")
+    plt.legend(ncol=2)
+
+    plt.subplot(2, 2, 3)
+    plt.plot(data_capacity[f][0], data_capacity[f][1], "o--", label=f)
+    plt.xlabel("År")
+    plt.ylabel("Antall studieplasser")
+    plt.legend(ncol=2)
+    
+    plt.subplot(2, 2, 4)
+    plt.plot(data_applicants[f][0], data_applicants[f][1], "o--", label=f)
+    plt.xlabel("År")
+    plt.ylabel("Antall søkere")
+    plt.legend(ncol=2)
+
+fig.tight_layout()
+plt.savefig("../figs/" + "combined" + ".png")
+plt.close()
+
+# Individual plots
+for f in fields_applicants:
+    fig = plt.figure(figsize=(11, 11))
 
     plt.subplot(2, 2, 1)
     plt.plot(data_applicants[f][0], 100 * np.array(data_applicants[f][1]) / totApplicants, "o--")
