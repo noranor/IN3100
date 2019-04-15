@@ -1,3 +1,3 @@
-sed -i 's/Æ/AE/g' *.data
-sed -i 's/Ø/OO/g' *.data
-sed -i 's/Å/AA/g' *.data
+sed -i 's/AE/Æ/g' *.data
+sed -i 's/OO/Ø/g' *.data
+sed -i 's/AA/Å/g' *.data
